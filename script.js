@@ -1,23 +1,62 @@
 function initMap() {
 
-    const buuDien = { lat: 10.78005814285056, lng: 106.69991822581564 };
-    const vanMieu = { lat: 21.027570230561004, lng: 105.83517853942371 };
+    const buuDien = new google.maps.LatLng(10.78005814285056, 106.69991822581564);
+    const vanMieu = new google.maps.LatLng(21.027570230561004, 105.83517853942371);
     const map = new google.maps.Map(document.getElementById("map"), {
-        zoom: 20,
+        zoom: 12,
         center: buuDien,
     });
 
+    var arrayPoint = [
+        new google.maps.geometry.spherical.computeOffset(buuDien, 13000, 0),
+        new google.maps.geometry.spherical.computeOffset(buuDien, 13000, 120),
+        new google.maps.geometry.spherical.computeOffset(buuDien, 13000, -120),
+        new google.maps.geometry.spherical.computeOffset(buuDien, 13000 * 2, 0),
+        new google.maps.geometry.spherical.computeOffset(buuDien, 13000 * 2, 120),
+        new google.maps.geometry.spherical.computeOffset(buuDien, 13000 * 2, -120),
+        new google.maps.geometry.spherical.computeOffset(vanMieu, 13000, 0),
+        new google.maps.geometry.spherical.computeOffset(vanMieu, 13000, 120),
+        new google.maps.geometry.spherical.computeOffset(vanMieu, 13000, -120),
+        new google.maps.geometry.spherical.computeOffset(vanMieu, 13000 * 2, 0),
+        new google.maps.geometry.spherical.computeOffset(vanMieu, 13000 * 2, 120),
+        new google.maps.geometry.spherical.computeOffset(vanMieu, 13000 * 2, -120),
+    ]
+
+
+    //begin drawing 
+
+
+    //function drawing Cricle 
     function drawingCricle(a) {
         const Cricle = new google.maps.Circle({
             strokeColor: "#FF0000",
             map: map,
             editable: false,
             center: a,
-            radius: 13,
+            radius: 13000,
         });
     }
     drawingCricle(buuDien);
     drawingCricle(vanMieu);
+
+    //function drawing Triangle
+    function drawingTriangle(a, b, c) {
+        const triangle = new google.maps.Polygon({
+            paths: [a, b, c],
+            strokeColor: "yellow",
+            strokeOpacity: 1,
+            strokeWeight: 2,
+        });
+        triangle.setMap(map);
+    }
+
+    drawingTriangle(arrayPoint[0], arrayPoint[1], arrayPoint[2]);
+    drawingTriangle(arrayPoint[3], arrayPoint[4], arrayPoint[5]);
+    drawingTriangle(arrayPoint[6], arrayPoint[7], arrayPoint[8]);
+    drawingTriangle(arrayPoint[9], arrayPoint[10], arrayPoint[11]);
+
+    //end drawing
+
     //add marker
 
     const markerBuuDien = new google.maps.Marker({
